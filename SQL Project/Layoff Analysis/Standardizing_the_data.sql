@@ -67,3 +67,8 @@ SET `date`=STR_TO_DATE(`date`,'%m/%d/%Y');
 
 SELECT `date`
 FROM layoff_staging2;
+
+ALTER TABLE layoff_staging2
+MODIFY COLUMN `date` DATE;
+
+-- standardization of data is done here now we move on to null value handling ..
