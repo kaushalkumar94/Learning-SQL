@@ -78,5 +78,21 @@ CREATE TABLE `layoff_staging2` (
   `row_num1` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO 
+INSERT INTO layoff_staging2
+SELECT *,
+ROW_NUMBER() OVER(
+				PARTITION BY company, location,industry,total_laid_off,percentage_laid_off,stage,country,`date`,funds_raised_millions) as row_num
+FROM layoff_staging;
+ 
+ 
+SELECT * FROM layoff_staging2
+WHERE row_num1>1;
 
+SET SQL_SAFE_UPDATES = 0; ##Run this before your DELETE: This error is actually protecting you from accidentally nuking an entire table.
+-- Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column.  To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect.
+
+DELETE
+FROM layoff_staging2
+WHERE row_num1>1;
+
+## now finally the duplicate data is removed .
